@@ -1,0 +1,47 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>App Story - Aziz Ilmawan</title><link rel="manifest" href="/manifest.json"/><link rel="apple-touch-icon" href="/images/icons/icon-192x192.png"/><meta name="theme-color" content="#ffffff"/><link rel="icon" type="image/png" sizes="32x32" href="/favicon.png"/><link rel="shortcut icon" href="/favicon.png"/><link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/><link rel="stylesheet" href="styles.css"/><script defer="defer" src="app.bundle.js"></script><link href="app.css" rel="stylesheet"></head><body><a href="#main-content" id="skip-link" class="skip-to-content" tabindex="1" aria-label="Skip to main content">Skip to Content</a><header><div class="main-header container"><a class="brand-name" href="#/" tabindex="2">App Story - Aziz Ilmawan</a> <button id="drawer-button" class="drawer-button" aria-label="Toggle Menu" tabindex="3">☰</button><nav><ul id="nav-list" class="nav-list"><li><a href="#/" tabindex="4">Beranda</a></li><li><a href="#/offline" tabindex="5">Cerita Offline</a></li><li><a href="#/add-story" tabindex="6">Tambah Cerita</a></li><li><a href="#/about" tabindex="7">About</a></li><li id="auth-link"><a href="#/login" tabindex="8">Login</a></li></ul></nav><button id="notif-btn" tabindex="9">Aktifkan Notifikasi</button></div></header><main id="main-content" class="main-content container" tabindex="-1"><div id="map" style="height: 400px; margin-bottom: 2rem; display: none"></div><section id="story-list"></section></main><script src="app.js"></script><script type="module" src="push-helper.js"></script><script>if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker
+            .register("/src/public/sw.js")
+            .then((reg) => console.log("✅ Service Worker terdaftar:", reg))
+            .catch((err) => console.error("❌ Gagal mendaftar Service Worker:", err));
+        });
+      }</script><script>document.addEventListener("DOMContentLoaded", function () {
+        const navList = document.getElementById("nav-list");
+        const drawerBtn = document.getElementById("drawer-button");
+        const authLink = document.getElementById("auth-link");
+
+        const isAuthenticated = !!localStorage.getItem("authToken");
+        if (isAuthenticated) {
+          authLink.innerHTML = '<a href="#/login" tabindex="7">Logout</a>';
+          authLink.addEventListener("click", function (e) {
+            e.preventDefault();
+            localStorage.removeItem("authToken");
+            alert("Anda telah logout.");
+            window.location.hash = "/login";
+          });
+        }
+
+        drawerBtn.addEventListener("click", () => {
+          navList.classList.toggle("show");
+        });
+
+        document.addEventListener("click", (event) => {
+          if (!drawerBtn.contains(event.target) && !navList.contains(event.target)) {
+            navList.classList.remove("show");
+          }
+        });
+
+        function setupSkipToContent() {
+          const mainContent = document.querySelector("#main-content");
+          const skipLink = document.querySelector("#skip-link");
+          skipLink.addEventListener("click", function (event) {
+            event.preventDefault();
+            skipLink.blur();
+            mainContent.focus();
+            mainContent.scrollIntoView({ behavior: "smooth" });
+          });
+        }
+
+        setupSkipToContent();
+        window.addEventListener("hashchange", setupSkipToContent);
+      });</script></body></html>
