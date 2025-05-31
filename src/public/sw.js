@@ -21,7 +21,6 @@ precaching.precacheAndRoute([
   { url: "/images/icons/icon-512x512.png", revision: null },
   { url: "/manifest.json", revision: null },
   { url: "/app.bundle.js", revision: null },  { url: "/app.webmanifest", revision: null },
-  // Tambahkan CSS files untuk mengatasi masalah styling offline
   { url: "styles.css", revision: null },
 ]);
 
