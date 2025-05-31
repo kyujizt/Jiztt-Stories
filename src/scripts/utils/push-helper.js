@@ -9,6 +9,11 @@ let serviceWorkerRegistration = null;
 // Key yang konsisten untuk localStorage
 const NOTIFICATION_KEY = 'notificationsEnabled';
 
+// Fungsi untuk memeriksa apakah notifikasi diaktifkan
+export function isNotificationsEnabled() {
+  return localStorage.getItem(NOTIFICATION_KEY) === 'true';
+}
+
 // Pastikan navigator.serviceWorker tersedia sebelum menambahkan event listener
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.addEventListener('message', async (event) => {
